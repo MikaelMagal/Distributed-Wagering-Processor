@@ -1,0 +1,23 @@
+{
+  "name": "distributed-wagering-processor",
+  "private": true,
+  "scripts": {
+    "infra:up": "docker compose up -d --wait",
+    "infra:down": "docker compose down -v",
+    "migration:up": "bun scripts/migrate.ts up",
+    "migration:down": "bun scripts/migrate.ts down",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mikro-orm/core": "^7.2.4",
+    "@mikro-orm/migrations": "^7.2.4",
+    "@mikro-orm/postgresql": "^7.2.4",
+    "decimal.js": "^10.6.0"
+  },
+  "devDependencies": {
+    "@mikro-orm/cli": "^7.2.4",
+    "bun-types": "^1.4.2",
+    "typescript": "^7.0.2"
+  }
+}
