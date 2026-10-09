@@ -6,8 +6,10 @@
     "infra:down": "docker compose down -v",
     "migration:up": "bun scripts/migrate.ts up",
     "migration:down": "bun scripts/migrate.ts down",
-    "test": "bun test",
-    "typecheck": "tsc --noEmit"
+    "test": "bun test test/unit test/integration",
+    "typecheck": "tsc --noEmit",
+    "test:unit": "bun test test/unit",
+    "test:integration": "bun test test/integration"
   },
   "dependencies": {
     "@mikro-orm/core": "^7.2.4",

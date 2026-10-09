@@ -13,3 +13,28 @@ export class InvalidMoneyError extends DomainError {
 export class CurrencyMismatchError extends DomainError {
   readonly code = 'CURRENCY_MISMATCH';
 }
+
+export class InsufficientFundsError extends DomainError {
+  readonly code = 'INSUFFICIENT_FUNDS';
+}
+
+export class InvalidWalletError extends DomainError {
+  readonly code = 'INVALID_WALLET';
+}
+
+export class InvalidWagerTransactionError extends DomainError {
+  readonly code = 'INVALID_WAGER_TRANSACTION';
+}
+
+/** Erro de programação: tentativa de transicionar a partir de um estado que não permite. */
+export class InvalidTransactionStateError extends DomainError {
+  readonly code = 'INVALID_TRANSACTION_STATE';
+}
+
+export class LedgerImbalanceError extends DomainError {
+  readonly code = 'LEDGER_IMBALANCE';
+}
+
+export class InvalidOutboxStateError extends DomainError {
+  readonly code = 'INVALID_OUTBOX_STATE';
+}
