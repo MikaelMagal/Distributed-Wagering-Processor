@@ -9,16 +9,24 @@
     "test": "bun test test/unit test/integration",
     "typecheck": "tsc --noEmit",
     "test:unit": "bun test test/unit",
-    "test:integration": "bun test test/integration"
+    "test:integration": "bun test test/integration",
+    "start": "bun src/main.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-sqs": "^3.1149.0",
     "@mikro-orm/core": "^7.2.4",
     "@mikro-orm/migrations": "^7.2.4",
     "@mikro-orm/postgresql": "^7.2.4",
-    "decimal.js": "^10.6.0"
+    "@nestjs/common": "^12.1.2",
+    "@nestjs/core": "^12.1.2",
+    "@nestjs/platform-express": "^12.1.2",
+    "decimal.js": "^10.6.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
   },
   "devDependencies": {
     "@mikro-orm/cli": "^7.2.4",
+    "@types/node": "^26.6.5",
     "bun-types": "^1.4.2",
     "typescript": "^7.0.2"
   }

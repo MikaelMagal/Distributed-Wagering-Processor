@@ -118,4 +118,40 @@ export class WagerTransactionRepository {
       ],
     );
   }
+
+  /**
+   * Atualiza uma transação ainda aberta (PENDING_REFERENCE) após reprocessar.
+   * O trigger do banco bloqueia qualquer UPDATE em transação já terminal.
+   * `observedBalance` só muda quando a transação chega a um estado final.
+   */
+  async update(tx: SqlExecutor, t: WagerTransaction, observedBalance?: Money): Promise<void> {
+    const s = t.toState();
+    await tx.query(
+      `UPDATE wager_transactions
+          SET status = ?, reference_transaction_id = ?, failure_code = ?, attempts = ?,
+              next_attempt_at = ?, processed_at = ?,
+              observed_balance = COALESCE(?::numeric, observed_balance)
+        WHERE id = ?`,
+      [
+        s.status, s.referenceTransactionId ?? null, s.failureCode ?? null, s.attempts,
+        s.nextAttemptAt?.toISOString() ?? null, s.processedAt?.toISOString() ?? null,
+        observedBalance?.toJSON().amount ?? null, s.id,
+      ],
+    );
+  }
+
+  /** PENDING_REFERENCE vencidas (usa o índice parcial wager_tx_pending_ref_idx). */
+  async findDuePendingReference(
+    tx: SqlExecutor,
+    now: Date,
+    limit: number,
+  ): Promise<{ id: string; walletId: string }[]> {
+    const rows = await tx.query<{ id: string; wallet_id: string }>(
+      `SELECT id, wallet_id FROM wager_transactions
+        WHERE status = 'PENDING_REFERENCE' AND next_attempt_at <= ?
+        ORDER BY next_attempt_at LIMIT ?`,
+      [now.toISOString(), limit],
+    );
+    return rows.map((r) => ({ id: r.id, walletId: r.wallet_id }));
+  }
 }

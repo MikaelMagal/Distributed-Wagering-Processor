@@ -1,5 +1,6 @@
 #!/bin/sh
-# Cria a DLQ FIFO e a fila principal FIFO com redrive policy (5 tentativas antes da DLQ).
+# Cria a DLQ FIFO, a fila principal FIFO com redrive policy (5 tentativas antes da DLQ)
+# e a fila FIFO de eventos de integração (publicados pela outbox).
 set -e
 awslocal sqs create-queue --queue-name wager-transactions-dlq.fifo \
   --attributes FifoQueue=true,ContentBasedDeduplication=false
@@ -8,3 +9,5 @@ DLQ_ARN=$(awslocal sqs get-queue-attributes \
   --attribute-names QueueArn --query 'Attributes.QueueArn' --output text)
 awslocal sqs create-queue --queue-name wager-transactions.fifo \
   --attributes "{\"FifoQueue\":\"true\",\"ContentBasedDeduplication\":\"false\",\"VisibilityTimeout\":\"30\",\"RedrivePolicy\":\"{\\\"deadLetterTargetArn\\\":\\\"${DLQ_ARN}\\\",\\\"maxReceiveCount\\\":\\\"5\\\"}\"}"
+awslocal sqs create-queue --queue-name wager-events.fifo \
+  --attributes FifoQueue=true,ContentBasedDeduplication=false

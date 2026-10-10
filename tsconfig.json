@@ -10,7 +10,7 @@
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["bun-types"],
+    "types": ["bun-types", "node"],
     "outDir": "dist"
   },
   "include": ["src", "test"]
